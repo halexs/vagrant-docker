@@ -13,4 +13,11 @@
 - name: Setup Docker
   import_playbook: docker.yml
 
+- hosts: all
+  tasks:
+  - name: Add to bashrc to default in share folder.
+    lineinfile:
+      path: /home/vagrant/.bashrc
+      line: 'cd /share'
+      insertbefore: BOF
 
