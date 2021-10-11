@@ -17,12 +17,16 @@
         - gnupg-agent
         - software-properties-common
       state: present
-      update_cache: yes
+      # update_cache: yes
 
   - name: add GPG key
     apt_key:
       url: https://download.docker.com/linux/ubuntu/gpg
       state: present
+
+  - name: Set the stable repository
+    apt_repository:
+      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
 
   - name: Install docker
     apt:
@@ -31,7 +35,29 @@
         - docker-ce-cli
         - containerd.io
       state: present
-      update_cache: yes
+      # update_cache: yes
+
+
+  - name: Create "docker" group
+    group:
+      name: "docker"
+      state: present
+
+  - name: Add remote "vagrant" user to "docker" group
+    user:
+      name: "vagrant"
+      group: "docker"
+      append: yes
+# curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+  - name: install docker-compose
+    get_url:
+      url: https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)
+      dest: /usr/local/bin/docker-compose
+      mode: 'u+x,g+x'
+
+  - name: Create symlink
+    file: src=/usr/local/bin/docker-compose dest=/usr/bin/docker-compose state=link
 
   - name: Start docker
     service:
