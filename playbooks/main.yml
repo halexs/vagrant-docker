@@ -2,11 +2,12 @@
 - hosts: all
   become: true
   tasks:
-  - name: Update and upgrade apt packages
-    apt:
-      upgrade: yes
-      update_cache: yes
-      cache_valid_time: 86400 #One day
+  # this task takes a long time.
+  # - name: Update and upgrade apt packages
+  #   apt:
+  #     upgrade: yes
+  #     update_cache: yes
+  #     cache_valid_time: 86400 #One day
 
   - name: Install docker dependency
     apt:
@@ -47,14 +48,15 @@
     user:
       name: "vagrant"
       group: "docker"
-      append: yes
+      # append: yes
 # curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
   - name: install docker-compose
     get_url:
       url: https://github.com/docker/compose/releases/download/1.27.4/docker-compose-Linux-x86_64
       dest: /usr/local/bin/docker-compose
-      mode: 'u+x,g+x'
+      # mode: 'u+x,g+x,o+x'
+      mode: 'o+x'
 
   - name: Create symlink
     file: src=/usr/local/bin/docker-compose dest=/usr/bin/docker-compose state=link
