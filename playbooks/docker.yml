@@ -1,0 +1,7 @@
+# See LICENSE.txt for complete license terms.
+---
+- name: Install Docker role
+  hosts: all
+  become: true
+  roles:
+    - docker
