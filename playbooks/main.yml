@@ -21,3 +21,11 @@
       line: 'cd /share'
       insertbefore: BOF
 
+- hosts: all
+  tasks:
+  - name: Add to bashrc to change default editor to vim.
+    lineinfile:
+      path: /home/vagrant/.bashrc
+      line: 'export EDITOR=vim'
+      insertbefore: BOF
+
